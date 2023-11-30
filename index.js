@@ -14,9 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 (async function connection() {
     let connected = false;
+    let destroySession = false;
     try {
-        const client = new Client({
-           // authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDFf" })
+        let client = new Client({
+           //authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDFf" })
         })
         client.initialize();
         
@@ -40,18 +41,21 @@ app.use(cors());
             }
         })
 
-        app.get('/qrcode', (req, res) => {
-            client.on('qr', qr => {
+        app.get('/qrcode',  (req, res) => {
+            console.log('qr code - chamou')
+            if(destroySession){
+                client.initialize();
+            }
+            client.on('qr',async qr => {
                 try {
                     //qrcode.generate(qr, { small: true });
                     /*var qr_svg = qrImage.image(qr, { type: 'svg' });
                     qr_svg.pipe(require('fs').createWriteStream('qrcode.svg'));*/
                     var svg_string = qrImage.imageSync(qr, { type: 'svg' });
                     res.status(200).json({ response: svg_string })
-    
+                     
                 } catch (e) {
                     console.log(e);
-                    res.status(300).json({ response: e })
                 }
             });
         })
@@ -60,11 +64,14 @@ app.use(cors());
 
         client.on('ready', async () => {
             console.log('Client is ready!');
+            client.sendMessage(client.info.wid._serialized, 'Conectado!')
             connected = true;
         })
-        client.on('disconnected', () => {
+        client.on('disconnected', async () => {
             console.log('Disconnected!');
             connected = false;
+            destroySession = true;
+            
         })
 
         app.post("/sendMessage", upload.array("files"), async (req, res) => {
