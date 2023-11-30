@@ -1,0 +1,24 @@
+{
+  "name": "com.whatsapp-pdf",
+  "version": "1.0.0",
+  "description": "Send pdf to another whatsapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/washington1995luiz/whatsapp-pdf.git"
+  },
+  "author": "Washington Luiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/washington1995luiz/whatsapp-pdf.git/issues"
+  },
+  "homepage": "https://github.com/washington1995luiz/whatsapp-pdf.git#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js"
+  }
+}
