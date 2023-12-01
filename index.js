@@ -17,7 +17,7 @@ app.use(cors());
     let destroySession = false;
     try {
         let client = new Client({
-           //authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDFf" })
+           authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF" })
         })
         client.initialize();
         
@@ -46,7 +46,7 @@ app.use(cors());
             if(destroySession){
                 client.initialize();
             }
-            client.on('qr',async qr => {
+            client.on('qr',async qr => {   
                 try {
                     //qrcode.generate(qr, { small: true });
                     /*var qr_svg = qrImage.image(qr, { type: 'svg' });
@@ -79,7 +79,7 @@ app.use(cors());
             const media = MessageMedia.fromFilePath(`${req.files[0].destination}${req.files[0].originalname}`);
             let number = req.body.number
             let numberCheck = number.toString().split('');
-            if (numberCheck.length > 10) {
+            if (numberCheck.length > 10 && await client.getNumberId(`55${number}`) == null) {
                 numberCheck.splice(2, 1);
                 number = numberCheck.join('')
             }
