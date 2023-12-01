@@ -18,6 +18,7 @@ app.use(cors());
     try {
         let client = new Client({
            authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF" })
+           //authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF-Developer" })
         })
         client.initialize();
         
@@ -42,18 +43,16 @@ app.use(cors());
         })
 
         app.get('/qrcode',  (req, res) => {
-            console.log('qr code - chamou')
+            console.log('get qrcode')
             if(destroySession){
                 client.initialize();
             }
             client.on('qr',async qr => {   
                 try {
-                    //qrcode.generate(qr, { small: true });
-                    /*var qr_svg = qrImage.image(qr, { type: 'svg' });
-                    qr_svg.pipe(require('fs').createWriteStream('qrcode.svg'));*/
+                    console.log("Trying generate new qr code")
                     var svg_string = qrImage.imageSync(qr, { type: 'svg' });
                     res.status(200).json({ response: svg_string })
-                     
+                    return
                 } catch (e) {
                     console.log(e);
                 }
@@ -78,14 +77,15 @@ app.use(cors());
             fs.renameSync(`${req.files[0].destination}${req.files[0].filename}`, `${req.files[0].destination}${req.files[0].originalname}`);
             const media = MessageMedia.fromFilePath(`${req.files[0].destination}${req.files[0].originalname}`);
             let number = req.body.number
-            let numberCheck = number.toString().split('');
-            if (numberCheck.length > 10 && await client.getNumberId(`55${number}`) == null) {
-                numberCheck.splice(2, 1);
-                number = numberCheck.join('')
+            let numberId = await client.getNumberId('55'+number);
+            if(numberId == null){
+                res.status(400).json({ error: "Este não é um whatsapp válido.\nVerifique o número e tente novamente!" })
+                return 
             }
-            client.sendMessage(`55${number}@c.us`, media);
+            client.sendMessage(numberId._serialized, media);
             fs.rmSync(`${req.files[0].destination}${req.files[0].originalname}`);
-            res.status(200).json({ message: "Mensagem Enviada!" })
+            res.status(200).json({ message: "Arquivo Enviado!" })
+            return
         })
 
 
