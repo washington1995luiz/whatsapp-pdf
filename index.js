@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const server = require('http').createServer(app);
-const wss = new WebSocket.Server({ port: 8081 })
+const wss = new WebSocket.Server({ server: server })
 
 ;(async function connection() {
     let connected = false;
