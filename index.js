@@ -6,6 +6,7 @@ const upload = multer({ dest: "uploads/" });
 const cors = require('cors');
 const fs = require('fs');
 const qrImage = require('qr-image');
+const helmet = require("helmet");
 
 const PORT = 8080;
 const app = express();
@@ -15,6 +16,14 @@ const WebSocket = require('ws');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", 'http://127.0.0.1:8080', 'ws://localhost:8080/', 'wss://localhost:8080/']
+      }
+    }
+  }));
 const server = require('http').createServer(app);
 const wss = new WebSocket.Server({ noServer: true })
 
