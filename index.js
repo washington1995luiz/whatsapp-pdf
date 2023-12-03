@@ -10,12 +10,13 @@ const helmet = require("helmet");
 
 const PORT = 8080;
 const app = express();
-const WebSocket = require('ws');
+//const WebSocket = require('ws');
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+/*
 app.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -24,17 +25,18 @@ app.use(helmet({
       }
     }
   }));
+ 
 const server = require('http').createServer(app);
 const wss = new WebSocket.Server({ port: 8081})
 
 app.get("/teste", (req, res) => {
     return res.status(200).json({ response: "working" })
 })
-
+ */
 ;(async function connection() {
     let connected = false;
     let destroySession = false;
-    wss.on('connection', function connection(ws) {
+    //wss.on('connection', function connection(ws) {
         
     try {
         let client = new Client({
@@ -44,7 +46,7 @@ app.get("/teste", (req, res) => {
         client.initialize();
         
         client.on('loading_screen', (percent, message) => {
-            ws.send("connecting")
+         //   ws.send("connecting")
             console.log('LOADING SCREEN', percent, message);
         })
 
@@ -85,7 +87,7 @@ app.get("/teste", (req, res) => {
 
         client.on('ready', async () => {
             console.log('Client is ready!');
-            ws.send("ready")
+           // ws.send("ready")
             client.sendMessage(client.info.wid._serialized, 'Conectado!')
             connected = true;
         })
@@ -116,7 +118,7 @@ app.get("/teste", (req, res) => {
         console.log(err);
     }
    
-});
+//});
 })()
 
 app.listen(PORT, () => {
