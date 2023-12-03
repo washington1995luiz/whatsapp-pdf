@@ -16,7 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const server = require('http').createServer(app);
-const wss = new WebSocket.Server({ server: server })
+const wss = new WebSocket.Server({ noServer: true })
+
+app.get("/teste", (req, res) => {
+    return res.status(200).json({ response: "working" })
+})
 
 ;(async function connection() {
     let connected = false;
@@ -25,7 +29,7 @@ const wss = new WebSocket.Server({ server: server })
         
     try {
         let client = new Client({
-           //authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF" })
+           authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF" })
            //authStrategy: new LocalAuth({ clientId: "WHATSAPP-PDF-Developer" })
         })
         client.initialize();
