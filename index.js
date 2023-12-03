@@ -20,7 +20,7 @@ app.use(helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'http://127.0.0.1:8080', 'ws://localhost:8080/', 'wss://localhost:8080/']
+        connectSrc: ["'self'", 'http://127.0.0.1:8080', 'ws://localhost:8081/', 'wss://localhost:8081/']
       }
     }
   }));
