@@ -25,7 +25,7 @@ app.use(helmet({
     }
   }));
 const server = require('http').createServer(app);
-const wss = new WebSocket.Server({ noServer: true })
+const wss = new WebSocket.Server({ port: 8081})
 
 app.get("/teste", (req, res) => {
     return res.status(200).json({ response: "working" })
