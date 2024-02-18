@@ -25,11 +25,10 @@ app.use(helmet({
         }
     }
 }));
-
-
+const pathUploads = "../../../../uploads"
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads");
+        cb(null, pathUploads/* "uploads"*/);
     },
     filename: (req, file, cb) => {
         let fileName = utf8.decode(file.originalname)
@@ -138,7 +137,7 @@ app.post("/sendFile", upload.array("files"), async (req, res) => {
         }
         let filesToSend = ''
         for (let i = 0; i < req.files.length; i++) {
-            const media = MessageMedia.fromFilePath("./uploads/" + utf8.decode(req.files[i].originalname));
+            const media = MessageMedia.fromFilePath(/*"./uploads/"*/pathUploads+"/" + utf8.decode(req.files[i].originalname));
             client.sendMessage(numberId._serialized, media)
             .then(() => {
          
@@ -204,7 +203,7 @@ app.post("/sendTextFile", upload.array("files"), async (req, res) => {
     */
     let filesToSend = ''
         for (let i = 0; i < req.files.length; i++) {
-            const media = MessageMedia.fromFilePath("./uploads/" + utf8.decode(req.files[i].originalname));
+            const media = MessageMedia.fromFilePath(/*"./uploads/"*/ pathUploads+"/" + utf8.decode(req.files[i].originalname));
             client.sendMessage(numberId._serialized, media, { caption: text })
             .then(() => {
          
